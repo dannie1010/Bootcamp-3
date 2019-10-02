@@ -67,12 +67,9 @@ exports.update = function(req, res) {
  
   if(req.results)
   {
-    if(req.body.address)
-    {
-      listing.coordinates = {
-        longitude: req.results.lng,
-        latitude: req.results.lat
-      };
+    listing.coordinates = {
+      longitude: req.results.lng,
+      latitude: req.results.lat
     }
   }
 
@@ -110,7 +107,7 @@ exports.delete = function(req, res) {
 
       else
       {
-        res.json(listing);
+        res.end();
       }
   })
 
@@ -120,7 +117,7 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
   /* Add your code */
 
-  Listing.find({}).sort({code: 1}).exec(function(err, listings)
+  Listing.find({}, null, {sort: {code: 1}}, function(err, Listings)
   {
     if(err)
     {
@@ -130,7 +127,8 @@ exports.list = function(req, res) {
 
     else
     {
-      res.json(listings);
+      res.json(Listings);
+      console.log(Listings);
     }
   });
 
