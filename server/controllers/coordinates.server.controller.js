@@ -1,5 +1,6 @@
 var config = require('../config/config'), 
     request = require('request');
+    GeoJSON = require('geojson');
 
 
 
@@ -15,7 +16,7 @@ module.exports = function(req, res, next) {
     var options = { 
       q: addressTemp4,
       key: config.openCage.key,  
-      address: req.body.address,
+      //address: req.body.address,
     }
 
     //Setup your request using URL and options - see ? for format
@@ -24,16 +25,12 @@ module.exports = function(req, res, next) {
       qs: options
       }, function(error, response, body) {
 
-        if(err)
-        {
-          res.status(400).send(err);
-        }
-
+        if(error) {
+          res.status(400).send(error);
+        } 
         var data = JSON.parse(body);
-        req.results = {
-          latitude: req.results.lat,
-          longitude: req.results.lng
-        };
+        req.results = data.results[0].geometry;
+      
         //For ideas about response and error processing see https://opencagedata.com/tutorials/geocode-in-nodejs
         
         //JSON.parse to get contents. Remember to look at the response's JSON format in open cage data
